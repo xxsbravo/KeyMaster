@@ -1,0 +1,8 @@
+{
+  "name": "fastify-app",
+  "main": "KeyMaster.js",
+  "type": "module",
+  "dependencies": {
+    "fastify": "^4.26.0"
+  }
+}
