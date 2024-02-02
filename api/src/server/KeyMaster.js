@@ -1,25 +1,16 @@
 import Fastify from 'fastify';
-import * as fs from 'node:fs/promises';
+import Database from "./Server.js"
 
 const listen_addr = '127.0.0.1';   //The ip address the api is listening for
 const listen_port = '8001';      //The port the api is listening port
-
-async function writeKeyToJSON(data)
-{
-    try
-    {
-        await fs.writeFile('../../assets/key.json', JSON.stringify(data));
-    }catch(error)
-    {
-        console.error(error);
-    }
-}
 
 //Logs all Requests
 const fastify = Fastify
 ({
     logger: true,
 });
+
+const database = new Database();
 
 //Indicates the web api is running
 fastify.get("/", (req, reply) => 
@@ -49,11 +40,11 @@ fastify.route
     {  
         try {
             const data = { key: `${req.query.key}` };
-            await writeKeyToJSON(data); // Await the execution of writeKeyToJSON
-            return { success: true, message: 'Data uploaded and processed successfully' };
+            await database.saveKey(data);
+            return { success: true, message: 'Key uploaded succesfully' };
           } catch (error) {
             console.error(error);
-            return { success: false, message: 'Error processing uploaded data' };
+            return { success: false, message: 'The program encountered an error while uploading' };
           }
     },
 });
