@@ -10,14 +10,15 @@ where they will be stored on the server so they may be downloaded by users.
 1. Install g++
 2. Install OpenSSL
 3. Install libssl-dev
-4. Build
-5. Execute
+4. Install libcurl4-openssl-dev
+5. Build
+6. Execute
 
 ## Build
 
-Upon installation of g++, OpenSSL, AND the libssl-dev development package, proceed by building KeyMaster with
+Upon installation of g++, OpenSSL, libcurl4 and libssl-dev development package, proceed by building KeyMaster with
 the following command:
 
 ```bash
-g++ -o KeyMaster KeyMaster.cpp main.cpp -O3 -lssl -lcrypto
+g++ -o KeyMasterClient KeyMaster.cpp main.cpp -O3 -lssl -lcurl -lcrypto
 ```

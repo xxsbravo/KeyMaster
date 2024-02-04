@@ -4,15 +4,17 @@
 To use KeyMaster simply call this function. Calling this function creates a secret key
 that is written to the file 'key.db'. If the file doesn't exist, it will be created in the same 
 directory as the executable, where the key is then written. If the file exists, execution 
-will cause the previous key to be overwritten,
+will cause the previous key to be overwritten.
 */
-string KeyMaster::generateKey()
+string KeyMaster::generate(string ip_addr)
 {
     string message = create_random_string(64);  //Generates a random 64-character string
     string key = sha256(message);               //Creates a sha256 hash from the randomly generated 64-character string.
 
     write("passphrase.db", message);            //Writes the passphrase to a file named key.db
-    write("key.db", key);                       //Writes the secret key (a SHA-256 hash) to a file named key.db
+
+    POST("http://" + ip_addr + ":" +            //Uploads the sha256 hash to the server with the specified IPv4 address.
+    "8001/api/upload?key=" + key);
 
     return key;
 }
@@ -64,4 +66,35 @@ void KeyMaster::write(string filename, string data)
     file.open(filename);
     file << data;
     file.close();
+}
+
+bool KeyMaster::POST(string full_url)
+{
+    CURL* curl;
+    CURLcode res;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    curl = curl_easy_init();
+
+    if(curl)
+    {
+        struct curl_slist *headers = NULL;
+
+        curl_easy_setopt(curl, CURLOPT_URL, full_url.c_str());
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+
+        res = curl_easy_perform(curl);
+
+        if(res != CURLE_OK)
+        {
+            fprintf(stderr, "[-]  error!: %s\n", curl_easy_strerror(res));
+            return FAIL;
+        }
+
+        curl_easy_cleanup(curl);
+    }
+
+    curl_global_cleanup();
+    return PASS;
 }
