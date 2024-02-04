@@ -2,12 +2,13 @@
 
 import * as fs from 'node:fs/promises';
 
+//Writes the secret-key to the private directory
 export default class Database {
     async saveKey(data)
     {
         try
         {
-            await fs.writeFile('../../../assets/key.json', JSON.stringify(data));
+            await fs.writeFile('../../../private/key.json', JSON.stringify(data));
         }catch(error)
         {
             console.error(error);

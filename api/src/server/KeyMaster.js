@@ -20,6 +20,9 @@ fastify.get("/", (req, reply) =>
     };
 });
 
+//Defines a route located @ /api/upload, where a key parameter is required.
+//Making an HTTP POST Request with this key parameter uploads it to the server
+//and writes it to the database.
 fastify.route
 ({
     method: 'POST',

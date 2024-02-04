@@ -2,17 +2,17 @@
 
 /*
 To use KeyMaster simply call this function. Calling this function creates a secret key
-that is written to the file key.db. If the file doesn't exist, it will be created in the same 
+that is written to the file 'key.db'. If the file doesn't exist, it will be created in the same 
 directory as the executable, where the key is then written. If the file exists, execution 
 will cause the previous key to be overwritten,
 */
 string KeyMaster::generateKey()
 {
-    string message = create_random_string(64);
-    string key = sha256(message);
+    string message = create_random_string(64);  //Generates a random 64-character string
+    string key = sha256(message);               //Creates a sha256 hash from the randomly generated 64-character string.
 
-    write("passphrase.db", message);
-    write("key.db", key);
+    write("passphrase.db", message);            //Writes the passphrase to a file named key.db
+    write("key.db", key);                       //Writes the secret key (a SHA-256 hash) to a file named key.db
 
     return key;
 }
@@ -56,7 +56,7 @@ string KeyMaster::create_random_string(short strlen)
     return str;
 }
 
-/*Writes the secret key (a SHA-256 hash) to a file named key.db*/
+/*Writes plaintext data to a file of a specified name*/
 void KeyMaster::write(string filename, string data)
 {
     ofstream file;
